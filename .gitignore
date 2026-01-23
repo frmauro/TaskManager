@@ -1,0 +1,23 @@
+# .NET
+bin/
+obj/
+*.user
+*.vs/
+
+# Node
+node_modules/
+/dist
+
+# IDE
+.vscode/
+.idea/
+
+# Mac
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Local secrets
+appsettings.Development.json

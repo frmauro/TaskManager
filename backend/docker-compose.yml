@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  mysqlserver:
+    image: mysql/mysql-server:5.7.31
+    container_name: mysqlserver
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: ShoppingCartDb
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - taskmanager_network
+
+  api:
+    build: .
+    container_name: taskmanager-api
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysqlserver
+    environment:
+      - ConnectionStrings__MySqlConnection=Server=mysqlserver;Database=ShoppingCartDb;Uid=root;Pwd=123;SslMode=None;
+    networks:
+      - taskmanager_network
+
+volumes:
+  mysql_data:
+
+networks:
+  taskmanager_network:

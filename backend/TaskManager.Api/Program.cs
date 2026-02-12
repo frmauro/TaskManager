@@ -97,9 +97,11 @@ builder.Services.AddAuthentication(options =>
 // CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost", policy =>
+    options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200", "http://127.0.0.1:4200");
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
 });
 
@@ -114,7 +116,7 @@ app.UseSwaggerUI(options =>
 });
 
 app.UseMiddleware<TaskManager.Api.Middleware.ErrorHandlingMiddleware>();
-app.UseCors("AllowLocalhost");
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 

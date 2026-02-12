@@ -19,7 +19,7 @@ export class JwtInterceptor implements HttpInterceptor {
   private isRefreshing = false;
   private refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   intercept(
     request: HttpRequest<unknown>,
@@ -27,13 +27,20 @@ export class JwtInterceptor implements HttpInterceptor {
   ): Observable<HttpEvent<unknown>> {
     // Adiciona o token JWT ao header se disponível
     const token = this.authService.getToken();
+    console.log('JwtInterceptor - Token:', token ? 'Present' : 'Missing');
+    console.log('JwtInterceptor - Request URL:', request.url);
+
     if (token && this.isTokenValid(token)) {
+      console.log('JwtInterceptor - Token is valid, adding to request');
       request = this.addToken(request, token);
+    } else {
+      console.log('JwtInterceptor - Token is invalid or missing');
     }
 
     return next.handle(request).pipe(
       catchError((error) => {
         if (error instanceof HttpErrorResponse && error.status === 401) {
+          console.log('JwtInterceptor - 401 error received');
           return this.handle401Error(request, next);
         } else {
           return throwError(() => error);

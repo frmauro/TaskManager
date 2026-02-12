@@ -48,8 +48,26 @@ public class AuthController : ControllerBase
         var (accessToken, refreshToken, expiresAt) = GenerateTokens(user);
         RefreshTokenStore.Save(refreshToken, user.Id, expiresAt.AddHours(7));
 
+
         _logger.LogInformation("User logged in: {Email}", user.Email);
-        return Ok(new TokenResponse { AccessToken = accessToken, RefreshToken = refreshToken, ExpiresAt = expiresAt });
+        
+        var userDto = new UserDto 
+        { 
+            Id = user.Id, 
+            Name = user.Name, 
+            Email = user.Email, 
+            IsActive = user.IsActive,
+            CreatedAt = user.CreatedAt,
+            UpdatedAt = user.UpdatedAt
+        };
+        
+        return Ok(new TokenResponse 
+        { 
+            Token = accessToken, 
+            RefreshToken = refreshToken, 
+            ExpiresAt = expiresAt,
+            User = userDto
+        });
     }
 
     /// <summary>
@@ -75,7 +93,24 @@ public class AuthController : ControllerBase
         var (accessToken, newRefreshToken, expiresAt) = GenerateTokens(user);
         RefreshTokenStore.Save(newRefreshToken, user.Id, expiresAt.AddHours(7));
 
-        return Ok(new TokenResponse { AccessToken = accessToken, RefreshToken = newRefreshToken, ExpiresAt = expiresAt });
+
+        var userDto = new UserDto 
+        { 
+            Id = user.Id, 
+            Name = user.Name, 
+            Email = user.Email, 
+            IsActive = user.IsActive,
+            CreatedAt = user.CreatedAt,
+            UpdatedAt = user.UpdatedAt
+        };
+
+        return Ok(new TokenResponse 
+        { 
+            Token = accessToken, 
+            RefreshToken = newRefreshToken, 
+            ExpiresAt = expiresAt,
+            User = userDto
+        });
     }
 
     private (string AccessToken, string RefreshToken, DateTime ExpiresAt) GenerateTokens(User user)

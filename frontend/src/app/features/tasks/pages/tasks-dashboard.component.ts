@@ -245,7 +245,8 @@ export class TasksDashboardComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         },
         error: (err) => {
-          this.errorMessage = 'Erro ao carregar tarefas';
+          console.error('Error loading tasks:', err);
+          this.errorMessage = err.message || 'Erro ao carregar tarefas';
           this.isLoading = false;
         },
       });

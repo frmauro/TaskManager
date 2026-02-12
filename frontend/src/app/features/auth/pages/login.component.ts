@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -90,7 +90,7 @@ import {
   `,
   styles: [],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   credentials: LoginDto = {
     email: '',
     password: '',
@@ -100,10 +100,6 @@ export class LoginComponent implements OnInit {
   successMessage = '';
 
   constructor(private authService: AuthService, private router: Router) { }
-
-  ngOnInit(): void {
-    this.authService.logout();
-  }
 
   onSubmit(): void {
     this.errorMessage = '';
